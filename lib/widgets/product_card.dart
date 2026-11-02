@@ -22,9 +22,19 @@ class _ProductCardState extends State<ProductCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: Icon(Icons.fastfood, size: 48)),
+            Expanded(
+              child: widget.product.imageUrl.startsWith('http')
+                  ? Image.network(
+                      widget.product.imageUrl,
+                      errorBuilder: (_, __, ___) => Icon(Icons.fastfood, size: 48),
+                    )
+                  : Image.asset(
+                      widget.product.imageUrl,
+                      errorBuilder: (_, __, ___) => Icon(Icons.fastfood, size: 48),
+                    ),
+            ),
             Text(widget.product.name),
-            Text('\${widget.product.price.toStringAsFixed(2)}'),
+            Text('\$${widget.product.price.toStringAsFixed(2)}'),
             QuantitySelector(
               quantity: qty,
               onChanged: (v) => setState(() => qty = v),

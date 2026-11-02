@@ -16,6 +16,7 @@ class _AdminEditScreenState extends ConsumerState<AdminEditScreen> {
   late String name;
   late double price;
   late Category category;
+  late String imageUrl;
 
   @override
   void initState() {
@@ -23,13 +24,13 @@ class _AdminEditScreenState extends ConsumerState<AdminEditScreen> {
     name = widget.product?.name ?? '';
     price = widget.product?.price ?? 0;
     category = widget.product?.category ?? Category.food;
+    imageUrl = widget.product?.imageUrl ?? 'assets/default_food.png';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          AppBar(title: Text(widget.product == null ? 'Agregar' : 'Editar')),
+      appBar: AppBar(title: Text(widget.product == null ? 'Agregar' : 'Editar')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -47,8 +48,18 @@ class _AdminEditScreenState extends ConsumerState<AdminEditScreen> {
                 decoration: const InputDecoration(labelText: 'Precio'),
                 keyboardType: TextInputType.number,
                 onSaved: (v) => price = double.tryParse(v ?? '') ?? 0,
-                validator: (v) =>
-                    v == null || double.tryParse(v) == null ? 'Inválido' : null,
+                validator: (v) {
+                  if (v == null || v.isEmpty) return 'Requerido';
+                  final value = double.tryParse(v);
+                  if (value == null) return 'Inválido';
+                  if (value <= 0) return 'Debe ser positivo';
+                  return null;
+                },
+              ),
+              TextFormField(
+                initialValue: imageUrl,
+                decoration: const InputDecoration(labelText: 'URL de la imagen'),
+                onSaved: (v) => imageUrl = v ?? 'assets/default_food.png',
               ),
               DropdownButtonFormField<Category>(
                 value: category,
@@ -70,13 +81,15 @@ class _AdminEditScreenState extends ConsumerState<AdminEditScreen> {
                           id: DateTime.now().millisecondsSinceEpoch.toString(),
                           name: name,
                           price: price,
-                          category: category));
+                          category: category,
+                          imageUrl: imageUrl));
                     } else {
                       notifier.update(Product(
                           id: widget.product!.id,
                           name: name,
                           price: price,
-                          category: category));
+                          category: category,
+                          imageUrl: imageUrl));
                     }
                     Navigator.pop(context);
                   }

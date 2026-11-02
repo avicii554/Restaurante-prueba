@@ -3,9 +3,27 @@ import 'product.dart';
 
 class CatalogNotifier extends StateNotifier<List<Product>> {
   CatalogNotifier() : super([
-    Product(id: '1', name: 'Hamburguesa', price: 8.0, category: Category.food),
-    Product(id: '2', name: 'Refresco', price: 2.0, category: Category.drink),
-    Product(id: '3', name: 'Pastel', price: 4.0, category: Category.dessert),
+    Product(
+      id: '1', 
+      name: 'Hamburguesa', 
+      price: 8.000, 
+      category: Category.food,
+      imageUrl: 'assets/burger.png',
+    ),
+    Product(
+      id: '2', 
+      name: 'Refresco', 
+      price: 2.000, 
+      category: Category.drink,
+      imageUrl: 'assets/drink.png',
+    ),
+    Product(
+      id: '3', 
+      name: 'Pastel', 
+      price: 3.500, 
+      category: Category.dessert,
+      imageUrl: 'assets/cake.png',
+    ),
   ]);
 
   void add(Product p) => state = [...state, p];
